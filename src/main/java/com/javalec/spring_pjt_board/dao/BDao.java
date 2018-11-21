@@ -26,14 +26,13 @@ public class BDao {
 	JdbcTemplate template = null;
 	
 	public BDao() {
-		
-		
-		try {
-			Context context = new InitialContext();
-			dataSource = (DataSource) context.lookup("java:comp/env/jdbc/Oracle11g");
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
+				
+//		try {
+//			Context context = new InitialContext();
+//			dataSource = (DataSource) context.lookup("java:comp/env/jdbc/Oracle11g");
+//		} catch (NamingException e) {
+//			e.printStackTrace();
+//		}
 		
 		template = Constant.template;
 	}
