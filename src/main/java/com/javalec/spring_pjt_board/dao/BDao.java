@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 
 import com.javalec.spring_pjt_board.dto.BDto;
+import com.javalec.spring_pjt_board.util.Constant;
 
 public class BDao {
 
@@ -70,7 +71,7 @@ public class BDao {
 		return dto;
 	}
 	
-	public void write(String bName, String bTitle,String bContent) {
+	public void write(String bName, String bTitle, String bContent) {
 		
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -109,6 +110,7 @@ public class BDao {
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
+		this.template = Constant.template;
 	}
 	
 	public ArrayList<BDto> list() {
@@ -155,17 +157,31 @@ public class BDao {
 		return dtos;
 	}
 
-	private void upHit(final String bId) {
+	private void upHit( String bId) {
+		// TODO Auto-generated method stub
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 		
-		String query = "update mvc_board set bHit = bHit + 1 where bId = ?";
-		this.template.update(query, new PreparedStatementSetter() {
+		try {
+			connection = dataSource.getConnection();
+			String query = "update mvc_board set bHit = bHit + 1 where bId = ?";
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, bId);
 			
-			@Override
-			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setInt(1, Integer.parseInt(bId));
+			int rn = preparedStatement.executeUpdate();
+					
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			try {
+				if(preparedStatement != null) preparedStatement.close();
+				if(connection != null) connection.close();
+			} catch (Exception e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
 			}
-		});
-		
+		}
 	}
 
 
